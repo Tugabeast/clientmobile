@@ -1,0 +1,269 @@
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow-y: hidden; /* evita scroll vertical */
+}
+
+.app-container {
+  display: flex;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.main-content {
+  flex: 1;
+  padding: 40px 20px;
+  /*background-color: #f5f7fa;*/
+  min-height: 100vh;
+  transition: margin-left 0.3s ease;
+}
+
+h1 {
+  font-size: 28px;
+  margin-bottom: 20px;
+  color: #333;
+  text-align: center;
+}
+
+.post-card {
+  padding: 20px;
+  border-radius: 10px;
+  background-color: #fefefe;
+  border: 1px solid #ddd;
+  margin-bottom: 30px;
+  max-height: unset;
+  overflow: unset;
+}
+
+.post-image {
+  width: 100%;
+  height: auto;
+  max-height: 350px;
+  object-fit: contain;
+  border-radius: 8px;
+  margin-bottom: 15px;
+  display: block;
+}
+
+.post-text {
+  font-size: 17px;
+  color: #444;
+  margin-bottom: 15px;
+}
+
+.question-block {
+  margin-bottom: 20px;
+}
+
+.question-label {
+  font-weight: 600;
+  margin-right: 10px;
+}
+
+.open-modal-btn {
+  background-color: #0066cc;
+  color: white;
+  padding: 10px 16px;
+  border: none;
+  font-size: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.open-modal-btn:hover {
+  background-color: #0050a8;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.modal {
+  background-color: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 450px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+}
+
+.modal h3 {
+  margin-top: 0;
+  font-size: 20px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.category-options label {
+  display: block;
+  margin: 8px 0;
+  font-size: 15px;
+}
+
+.category-options input {
+  margin-right: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.modal-submit-btn {
+  background-color: #28a745;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.modal-submit-btn:hover {
+  background-color: #218838;
+}
+
+.close-btn {
+  background-color: #ccc;
+  color: #333;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.message {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #006400;
+  font-size: 16px;
+  text-align: center;
+}
+
+.carousel-nav {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.carousel-nav button {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  background-color: #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.carousel-nav button:disabled {
+  background-color: #eee;
+  cursor: not-allowed;
+}
+
+.carousel-nav button:hover:not(:disabled) {
+  background-color: #ccc;
+}
+
+.post-stats {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 10px;
+  font-size: 16px;
+  color: #333;
+  font-weight: 500;
+}
+
+.post-interactions {
+  display: flex;
+  gap: 15px;
+  font-size: 16px;
+  margin-bottom: 15px;
+  color: #333;
+}
+
+.answered {
+  margin-left: 10px;
+  font-weight: bold;
+  color: green;
+  font-size: 15px;
+}
+
+
+/* MOBILE: até 768px */
+@media (max-width: 768px) {
+  .main-content {
+    margin-top: 100px;
+    margin-left: -240px;
+    padding: 16px 12px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .post-card {
+    padding: 12px;
+    margin-bottom: 20px;
+  }
+
+  .post-image {
+    max-height: 200px;
+  }
+
+  .post-text {
+    font-size: 15px;
+  }
+
+  .question-label,
+  .answered {
+    font-size: 14px;
+  }
+
+  .open-modal-btn {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .modal {
+    width: 95%;
+    padding: 16px;
+  }
+
+  .modal h3 {
+    font-size: 18px;
+  }
+
+  .modal-submit-btn,
+  .close-btn {
+    font-size: 14px;
+    padding: 10px 14px;
+  }
+
+  .carousel-nav {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .carousel-nav button {
+    width: 100%;
+  }
+}
