@@ -68,7 +68,7 @@ function RegisterPage() {
       <form onSubmit={handleSubmit} className={styles.registerForm}>
         <h1 className={styles.registerTitle}>Socialsfy</h1>
         <h2 className={styles.registerSubtitle}>Criar conta</h2>
-        {message && <p className={styles.successMessage}>{message}</p>}
+        {message && <p className={styles.errorMessage}>{message}</p>}
         <label className={styles.registerLabel}>Username</label>
         <input
           type="text"

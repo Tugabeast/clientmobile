@@ -9,19 +9,31 @@ import UserProfilePage from './pages/user/UserProfilePage';
 import UserStatisticsPage from './pages/user/UserStatisticsPage';
 import UserPostClassificationPage from './pages/user/UserPostClassificationPage';
 
+import NotAllowedPage from './pages/system/NotAllowedPage';
+import NotFoundPage from './pages/system/NotFoundPage';
 
 import './styles/AuthBackground.css';
 import { AuthContext } from './context/AuthContext';
 
-const ProtectedRoute = ({ children }) => {
+/**
+ * - Se não autenticado → redireciona para "/"
+ * - Se autenticado mas sem permissão → "/not-allowed"
+ */
+const ProtectedRoute = ({ children, onlyFor }) => {
   const { userType, loading } = useContext(AuthContext);
 
   if (loading) {
-    return <div style={{ textAlign: 'center', paddingTop: '100px' }}>A carregar...</div>;
+    return <div style={{ textAlign: 'center', paddingTop: 100 }}>A carregar...</div>;
   }
 
-  if (!userType) return <Navigate to="/" />;
-  if (userType !== 'user') return <Navigate to="/home" />;
+  // não autenticado
+  if (!userType) return <Navigate to="/" replace />;
+
+  // autenticado mas sem permissão
+  if (Array.isArray(onlyFor) && !onlyFor.includes(userType)) {
+    return <Navigate to="/not-allowed" replace />;
+  }
+
   return children;
 };
 
@@ -29,11 +41,11 @@ const App = () => {
   return (
     <Router>
       <Routes>
-        {/* Login / Registo */}
+        {/* Auth */}
         <Route path="/" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
 
-        {/* Páginas do Utilizador */}
+        {/* Utilizador (mobile) */}
         <Route
           path="/home"
           element={
@@ -66,6 +78,12 @@ const App = () => {
             </ProtectedRoute>
           }
         />
+
+        {/* Bloqueio para perfis não suportados na app mobile */}
+        <Route path="/not-allowed" element={<NotAllowedPage />} />
+
+        {/* 404 */}
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </Router>
   );
