@@ -1,6 +1,7 @@
 {
   "name": "clientmobile",
   "version": "0.1.0",
+  "homepage": "http://193.137.84.23/mobile",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.2.4",

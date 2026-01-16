@@ -39,7 +39,7 @@ const ProtectedRoute = ({ children, onlyFor }) => {
 
 const App = () => {
   return (
-    <Router>
+    <Router basename='/mobile'>
       <Routes>
         {/* Auth */}
         <Route path="/" element={<LoginPage />} />
