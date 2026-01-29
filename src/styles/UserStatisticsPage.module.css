@@ -1,132 +1,224 @@
 /* UserStatisticsPage.module.css */
+
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow-y: hidden; /* evita scroll vertical */
+  width: 100%;
 }
 
+/* Container Principal */
 .container {
   display: flex;
-  flex-direction: row;
-  height: 100vh;
-  width: 90%;
-  overflow: hidden;
+  flex-direction: row; 
+  height: 100vh;       
+  width: 100vw;        
+  overflow: hidden;    
+  background-color: #f8f9fa; 
 }
 
+/* Área de Conteúdo */
 .content {
-  padding: 1rem 2rem;
-  height: 100vh;
+  flex: 1;             
+  height: 100%;        
+  padding: 2rem;       
+  overflow-y: auto;    
   display: flex;
   flex-direction: column;
-  width: 100%;
-  overflow: hidden;
+  box-sizing: border-box;
 }
 
+/* Títulos */
+.content h1 {
+  margin-bottom: 2rem;
+  color: #333;
+  text-align: center;
+}
+
+/* --- NOVO: Wrapper para alinhar Título e Ícone --- */
+.chartTitleWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
+
+.chartTitleWrapper h2 {
+  margin: 0;
+  color: #555;
+  font-size: 1.5rem; /* Ajustado para bater certo com o original */
+}
+
+/* --- NOVO: Ícone de Ajuda (?) --- */
+.infoIcon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 22px;
+  height: 22px;
+  background-color: #e0e0e0;
+  color: #555;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: bold;
+  cursor: help;
+  position: relative; /* Necessário para o tooltip absoluto */
+  transition: background-color 0.2s;
+}
+
+.infoIcon:hover {
+  background-color: #bbb;
+  color: #000;
+}
+
+/* --- NOVO: O Balão de Texto (Tooltip) --- */
+.infoIcon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 135%;       /* Aparece acima do ícone */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+  width: 200px;
+  text-align: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  line-height: 1.4;
+  white-space: normal;
+}
+
+/* --- NOVO: Seta do Balão --- */
+.infoIcon::before {
+  content: "";
+  position: absolute;
+  bottom: 85%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #333 transparent transparent transparent;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s;
+}
+
+.infoIcon:hover::after,
+.infoIcon:hover::before {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Layout dos Gráficos (Original) */
 .chartContainer {
-  flex-grow: 1;
+  width: 100%;
+  max-width: 1000px;   
+  margin: 0 auto;      
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  overflow: hidden;
+  gap: 3rem;           
+  padding-bottom: 2rem;
 }
 
 .chartSection {
-  width: 100%;
-  max-width: 800px;
-  flex: 1;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1); 
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
-  overflow: hidden;
-  padding: 0.5rem 0;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .pieChart {
-  height: 100%;
-  max-height: 40vh;
-  margin-bottom: 2rem;
-}
-
-.barChart {
   width: 100%;
-  height: 100%;
-  max-height: 40vh;
-  margin-bottom: 2rem;
+  height: 300px;       
+  display: flex;
+  justify-content: center;
+  position: relative;
 }
 
 .chartScrollWrapper {
   width: 100%;
-  overflow-x: auto;
+  overflow-x: auto;    
   overflow-y: hidden;
-  margin-bottom: 2rem;
+  padding-bottom: 10px; 
+  -webkit-overflow-scrolling: touch; 
+}
+
+.barChart {
+  height: 350px;       
+  width: 100%;
+  position: relative;
 }
 
 
+/* ==========================================================================
+   MOBILE / TABLET (Ecrãs menores que 768px)
+   Mantendo a estrutura EXATA que forneceste
+   ========================================================================== */
 @media (max-width: 768px) {
+  
   .container {
-    margin-left: -100px;
-    width: 150%;
-    min-height: 100vh;
+    flex-direction: column; 
+    position: relative;
   }
 
   .content {
-    padding: 1rem;
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    width: 100%;      
+    padding: 1rem;    
+    padding-top: 4rem; /* Mantido conforme teu código original */
+    overflow-x: hidden; 
   }
 
   .chartContainer {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 100%;
+    gap: 2rem;
   }
 
   .chartSection {
+    padding: 1rem;
     width: 100%;
-    max-width: 100%;
-    padding: 1.5rem 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+  }
+
+  .content h1 {
+    font-size: 1.5rem;
+    margin-top: 0.5rem;
+  }
+  
+  /* Ajuste no Título para Mobile */
+  .chartTitleWrapper h2 {
+    font-size: 1.2rem;
   }
 
   .pieChart {
-    width: 80%;
-    max-width: 300px;
-    height: auto;
-    margin: 1rem 0;
+    height: 250px; 
   }
 
   .barChart {
-    min-width: 600px;
     height: 300px;
-    width: 70%;
-    margin-left: 6rem;
   }
 
-  .chartScrollWrapper {
-    width: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    margin-bottom: 1rem;
+  /* --- Ajuste Especial para o Tooltip no Mobile --- 
+     Isto garante que o balão não sai do ecrã à direita/esquerda */
+  .infoIcon::after {
+    width: 160px;
+    left: -70px; /* Puxa o balão para a esquerda */
+    transform: none; /* Remove a centralização absoluta */
+    bottom: 150%; 
   }
-
-  h1 {
-    font-size: 1.5rem;
-    text-align: center;
-    font-weight: bold;
-  }
-
-  h2 {
-    font-size: 1.2rem;
-    font-weight: bold;
-    text-align: center;
-    margin-top: 1rem;
+  
+  .infoIcon::before {
+    left: 50%;
   }
 }

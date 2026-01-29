@@ -20,6 +20,9 @@ const UserStatisticsPage = () => {
   const [generalStats, setGeneralStats] = useState([]);
   const scrollRef = useRef(null);
 
+  // Texto explicativo para o Tooltip
+  const tooltipText = "Dica: Clica na legenda (cores) para ocultar/mostrar Validadas ou Por Validar.";
+
   useEffect(() => {
     api.get('/stats/user')
       .then(res => setUserStats(res.data))
@@ -36,7 +39,7 @@ const UserStatisticsPage = () => {
       if (sidebar) {
         sidebar.style.position = 'fixed';
       }
-    }, 100); // pequeno atraso para garantir que o elemento existe
+    }, 100); 
 
     return () => {
       clearTimeout(timeout);
@@ -46,8 +49,6 @@ const UserStatisticsPage = () => {
       }
     };
   }, []);
-
-
 
   const pieData = {
     labels: ['Validadas', 'Por Validar'],
@@ -84,15 +85,25 @@ const UserStatisticsPage = () => {
         <h1>Estatísticas de Classificação</h1>
 
         <section className={styles.chartContainer}>
+          
+          {/* GRÁFICO 1 */}
           <div className={styles.chartSection}>
-            <h2>As tuas classificações</h2>
+            <div className={styles.chartTitleWrapper}>
+              <h2>As tuas classificações</h2>
+              <span className={styles.infoIcon} data-tooltip={tooltipText}>?</span>
+            </div>
             <div className={styles.pieChart}>
               <Pie data={pieData} />
             </div>
           </div>
 
+          {/* GRÁFICO 2 */}
           <div className={styles.chartSection}>
-            <h2>Classificações Gerais</h2>
+            <div className={styles.chartTitleWrapper}>
+              <h2>Classificações Gerais</h2>
+              <span className={styles.infoIcon} data-tooltip={tooltipText}>?</span>
+            </div>
+            
             <div className={styles.chartScrollWrapper} ref={scrollRef}>
               <div
                 className={styles.barChart}

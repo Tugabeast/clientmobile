@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://193.137.84.23/api',
+  // CRA usa process.env
+  baseURL: process.env.REACT_APP_API_URL || 'http://localhost:5000',
 });
 
 // Adicionado o token ao cabeçalho para cada pedido

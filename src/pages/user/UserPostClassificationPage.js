@@ -12,18 +12,39 @@ const UserPostClassificationPage = () => {
   const [showClassified, setShowClassified] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  // Modal de zoom da imagem
-  const [expandedImage, setExpandedImage] = useState(null);
+  // --- NOVOS ESTADOS ---
+  const [studies, setStudies] = useState([]);
+  const [selectedStudyId, setSelectedStudyId] = useState('');
+
+  // 1. Carregar estudos
+  const fetchUserStudies = async () => {
+    try {
+      const res = await api.get('/studies/user');
+      const studiesData = Array.isArray(res.data) ? res.data : [];
+      setStudies(studiesData);
+
+      if (studiesData.length > 0) {
+        setSelectedStudyId(studiesData[0].id);
+      }
+    } catch (err) {
+      console.error('Erro ao buscar estudos do utilizador:', err);
+    }
+  };
 
   useEffect(() => {
+    fetchUserStudies();
     fetchClassifiedPosts();
   }, []);
 
-  useEffect(() => {
-    fetchPosts();
-  }, [classifiedPosts, showClassified]);
+  const [expandedImage, setExpandedImage] = useState(null);
 
-  // Fecha o modal de imagem com ESC
+  // 2. Disparar busca de posts sempre que o ID do estudo muda
+  useEffect(() => {
+    if (selectedStudyId) {
+      fetchPosts();
+    }
+  }, [selectedStudyId, classifiedPosts, showClassified]);
+
   useEffect(() => {
     if (!expandedImage) return;
     const onKey = (e) => e.key === 'Escape' && setExpandedImage(null);
@@ -40,21 +61,39 @@ const UserPostClassificationPage = () => {
     }
   };
 
+  // 3. Buscar posts (filtro studyId)
   const fetchPosts = async () => {
     try {
-      const res = await api.get('/posts');
-      const allPosts = res.data.posts;
+      console.log(`🚀 [FRONTEND] Pedido API: /posts?studyId=${selectedStudyId}`);
+      // Adiciona timestamp
+      const res = await api.get(`/posts?studyId=${selectedStudyId}&t=${Date.now()}`);
+      
+      const allPosts = res.data.posts || [];
+      console.log(`📥 [FRONTEND] Recebidos ${allPosts.length} posts.`);
+
       const filteredPosts = showClassified
         ? allPosts
         : allPosts.filter((post) => {
             const classified = classifiedPosts[post.id];
+            if (!post.questions || post.questions.length === 0) return true;
             return !post.questions.every((q) => classified?.[q.id]?.length > 0);
           });
+          
       setPosts(filteredPosts);
-      setCurrentIndex(0);
+      
     } catch (err) {
       console.error('Erro ao buscar posts:', err);
     }
+  };
+
+  // 4. Mudar estudo e LIMPAR VISUALMENTE
+  const handleStudyChange = (e) => {
+    const newId = e.target.value;
+    console.log(`Mudança de estudo para ID: ${newId}`);
+    
+    setSelectedStudyId(newId);
+    setPosts([]); // Limpa a lista imediatamente
+    setCurrentIndex(0); 
   };
 
   const toggleModal = (questionId) => {
@@ -77,7 +116,6 @@ const UserPostClassificationPage = () => {
         });
       }
     }
-
     setModalsOpen((prev) => ({ ...prev, [questionId]: !prev[questionId] }));
   };
 
@@ -167,8 +205,6 @@ const UserPostClassificationPage = () => {
   const handleNext = () => currentIndex < posts.length - 1 && setCurrentIndex(currentIndex + 1);
 
   const currentPost = posts[currentIndex];
-
-  // Link do autor (quando existir)
   const authorLink = (p) => p?.postLink || p?.pageLink || null;
 
   return (
@@ -177,6 +213,28 @@ const UserPostClassificationPage = () => {
       <div className="main-content">
         <h1>Classificar Post</h1>
 
+        {/* --- SELECT BOX DE ESTUDOS --- */}
+        <div style={{ marginBottom: '20px', padding: '15px', background: '#f5f5f5', borderRadius: '8px', border: '1px solid #ddd' }}>
+            <label style={{ fontWeight: 'bold', marginRight: '10px', fontSize: '1.1rem' }}>
+                Selecionar Estudo:
+            </label>
+            <select 
+                value={selectedStudyId} 
+                onChange={handleStudyChange}
+                style={{ padding: '8px', fontSize: '1rem', borderRadius: '5px', minWidth: '250px', cursor: 'pointer' }}
+            >
+                {studies.length === 0 ? (
+                    <option value="">A carregar estudos...</option>
+                ) : (
+                    studies.map(study => (
+                        <option key={study.id} value={study.id}>
+                            {study.name}
+                        </option>
+                    ))
+                )}
+            </select>
+        </div>
+
         <label>
           <input type="checkbox" checked={showClassified} onChange={() => setShowClassified(!showClassified)} />{' '}
           Mostrar posts já classificados
@@ -184,7 +242,6 @@ const UserPostClassificationPage = () => {
 
         {currentPost ? (
           <div className="post-card">
-            {/* Byline do autor (em cima da imagem) */}
             <div className="byline">
               <strong>Autor:</strong>{' '}
               {authorLink(currentPost) ? (
@@ -271,10 +328,13 @@ const UserPostClassificationPage = () => {
             </div>
           </div>
         ) : (
-          <p>Nenhum post disponível para classificar.</p>
+          <p style={{ marginTop: '20px', fontSize: '1.1rem', color: '#555' }}>
+            {selectedStudyId 
+             ? "Nenhum post disponível para classificar neste estudo." 
+             : "A carregar..."}
+          </p>
         )}
 
-        {/* Modal do zoom da imagem */}
         {expandedImage && (
           <div className="img-backdrop" onClick={() => setExpandedImage(null)}>
             <div className="img-modal" onClick={(e) => e.stopPropagation()}>

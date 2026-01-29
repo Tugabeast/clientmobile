@@ -86,16 +86,16 @@ const MenuHamburguer = () => {
             Home
           </MenuItem>
 
+          <MenuItem icon={<FaClipboardCheck size={18} />} onClick={() => navigate('/classify')}>
+            Classificar
+          </MenuItem>
+
           <MenuItem icon={<FaChartBar size={18} />} onClick={() => navigate('/statistics')}>
             Estatísticas
           </MenuItem>
 
           <MenuItem icon={<FaUser size={18} />} onClick={() => navigate('/profile')}>
             Perfil
-          </MenuItem>
-
-          <MenuItem icon={<FaClipboardCheck size={18} />} onClick={() => navigate('/classify')}>
-            Classificar
           </MenuItem>
 
           <MenuItem icon={<FaSignOutAlt size={18} />} onClick={handleLogout}>
