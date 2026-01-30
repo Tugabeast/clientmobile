@@ -1,14 +1,10 @@
 import React, { useState } from 'react';
-//import { useNavigate } from 'react-router-dom';
 import api from '../../services/api';
 import MenuHamburguer from '../../components/MenuHamburguer';
-//import { AuthContext } from '../../context/AuthContext';
 import styles from '../../styles/ProfilePage.module.css';
 import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const UserProfilePage = () => {
-  //const navigate = useNavigate();
-  //const { logout } = useContext(AuthContext);
 
   const [newUsername, setNewUsername] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');

@@ -14,3 +14,17 @@ root.render(
     </AuthProvider>
   </React.StrictMode>
 );
+
+// --- CÓDIGO PARA REGISTAR O SERVICE WORKER (PWA) ---
+// Isto verifica se o browser suporta Service Workers e carrega o ficheiro
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/service-worker.js')
+      .then((registration) => {
+        console.log('✅ Service Worker registado com sucesso:', registration.scope);
+      })
+      .catch((err) => {
+        console.log('❌ Falha ao registar o Service Worker:', err);
+      });
+  });
+}

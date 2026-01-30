@@ -16,8 +16,10 @@ import './styles/AuthBackground.css';
 import { AuthContext } from './context/AuthContext';
 
 /**
- * - Se não autenticado → redireciona para "/"
- * - Se autenticado mas sem permissão → "/not-allowed"
+ * 🔒 Rota Protegida
+ * - Espera o loading terminar.
+ * - Se não autenticado -> Login.
+ * - Se sem permissão -> Not Allowed.
  */
 const ProtectedRoute = ({ children, onlyFor }) => {
   const { userType, loading } = useContext(AuthContext);
@@ -37,13 +39,47 @@ const ProtectedRoute = ({ children, onlyFor }) => {
   return children;
 };
 
+/**
+ * 🔓 Rota Pública (NOVO)
+ * - Se o utilizador JÁ estiver logado e tentar ir ao Login ("/"),
+ * nós mandamo-lo diretamente para a Home.
+ */
+const PublicRoute = ({ children }) => {
+  const { userType, loading } = useContext(AuthContext);
+
+  if (loading) {
+    return <div></div>; // Ou um spinner simples
+  }
+
+  if (userType === 'user') {
+    return <Navigate to="/home" replace />;
+  }
+  
+
+  return children;
+};
+
 const App = () => {
   return (
     <Router basename='/mobile'>
       <Routes>
-        {/* Auth */}
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
+        {/* Auth - Agora protegidas para não deixar entrar quem já está logado */}
+        <Route 
+          path="/" 
+          element={
+            <PublicRoute>
+              <LoginPage />
+            </PublicRoute>
+          } 
+        />
+        <Route 
+          path="/register" 
+          element={
+            <PublicRoute>
+              <RegisterPage />
+            </PublicRoute>
+          } 
+        />
 
         {/* Utilizador (mobile) */}
         <Route

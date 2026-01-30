@@ -7,13 +7,15 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(null);
   const [username, setUsername] = useState(null);
   const [userId, setUserId] = useState(null);
+  
+  // O loading começa a true para impedir que a App mostre a página de Login antes de verificar a memória
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedToken = localStorage.getItem('token');
-    const storedType = localStorage.getItem('userType');
-    const storedUsername = localStorage.getItem('username');
-    const storedUserId = localStorage.getItem('userId');
+    const storedToken = sessionStorage.getItem('token');
+    const storedType = sessionStorage.getItem('userType');
+    const storedUsername = sessionStorage.getItem('username');
+    const storedUserId = sessionStorage.getItem('userId');
 
     if (storedToken && storedType && storedUsername && storedUserId) {
       setToken(storedToken);
@@ -26,10 +28,10 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = (newToken, newType, newUsername, newUserId) => {
-    localStorage.setItem('token', newToken);
-    localStorage.setItem('userType', newType);
-    localStorage.setItem('username', newUsername);
-    localStorage.setItem('userId', newUserId);
+    sessionStorage.setItem('token', newToken);
+    sessionStorage.setItem('userType', newType);
+    sessionStorage.setItem('username', newUsername);
+    sessionStorage.setItem('userId', newUserId);
 
     setToken(newToken);
     setUserType(newType);
@@ -38,7 +40,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   const logout = () => {
-    localStorage.clear();
+    sessionStorage.clear(); // Limpa apenas a aba atual
     setToken(null);
     setUserType(null);
     setUsername(null);

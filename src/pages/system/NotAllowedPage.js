@@ -1,5 +1,5 @@
 import React from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, } from 'react-router-dom';
 
 const container = {
   minHeight: '100vh',
@@ -20,9 +20,7 @@ const card = {
 };
 
 const NotAllowedPage = () => {
-  const location = useLocation();
 
-  // Se por algum motivo vier aqui um "user", manda-o para a home
   const userType = localStorage.getItem('userType');
   if (userType === 'user') return <Navigate to="/home" replace />;
 

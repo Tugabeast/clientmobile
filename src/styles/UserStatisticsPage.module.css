@@ -1,5 +1,3 @@
-/* UserStatisticsPage.module.css */
-
 html, body {
   margin: 0;
   padding: 0;
@@ -7,7 +5,6 @@ html, body {
   width: 100%;
 }
 
-/* Container Principal */
 .container {
   display: flex;
   flex-direction: row; 
@@ -17,7 +14,6 @@ html, body {
   background-color: #f8f9fa; 
 }
 
-/* Área de Conteúdo */
 .content {
   flex: 1;             
   height: 100%;        
@@ -28,14 +24,13 @@ html, body {
   box-sizing: border-box;
 }
 
-/* Títulos */
 .content h1 {
   margin-bottom: 2rem;
   color: #333;
   text-align: center;
 }
 
-/* --- NOVO: Wrapper para alinhar Título e Ícone --- */
+/* Wrapper do Título e Botão */
 .chartTitleWrapper {
   display: flex;
   align-items: center;
@@ -43,15 +38,28 @@ html, body {
   gap: 10px;
   margin-top: 1rem;
   margin-bottom: 1rem;
+  position: relative; /* Importante para posicionamento */
 }
 
 .chartTitleWrapper h2 {
   margin: 0;
   color: #555;
-  font-size: 1.5rem; /* Ajustado para bater certo com o original */
+  font-size: 1.5rem;
 }
 
-/* --- NOVO: Ícone de Ajuda (?) --- */
+/* --- Botão de Expandir (Escondido em PC) --- */
+.expandBtn {
+  display: none; 
+  background: none;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: #555;
+  margin-left: auto; 
+}
+
 .infoIcon {
   display: inline-flex;
   justify-content: center;
@@ -64,7 +72,7 @@ html, body {
   font-size: 14px;
   font-weight: bold;
   cursor: help;
-  position: relative; /* Necessário para o tooltip absoluto */
+  position: relative; 
   transition: background-color 0.2s;
 }
 
@@ -73,11 +81,10 @@ html, body {
   color: #000;
 }
 
-/* --- NOVO: O Balão de Texto (Tooltip) --- */
 .infoIcon::after {
   content: attr(data-tooltip);
   position: absolute;
-  bottom: 135%;       /* Aparece acima do ícone */
+  bottom: 135%;
   left: 50%;
   transform: translateX(-50%);
   background-color: #333;
@@ -97,7 +104,6 @@ html, body {
   white-space: normal;
 }
 
-/* --- NOVO: Seta do Balão --- */
 .infoIcon::before {
   content: "";
   position: absolute;
@@ -118,7 +124,6 @@ html, body {
   visibility: visible;
 }
 
-/* Layout dos Gráficos (Original) */
 .chartContainer {
   width: 100%;
   max-width: 1000px;   
@@ -139,6 +144,7 @@ html, body {
   align-items: center;
   width: 100%;
   box-sizing: border-box;
+  transition: all 0.3s ease; /* Animação suave ao expandir */
 }
 
 .pieChart {
@@ -163,10 +169,19 @@ html, body {
   position: relative;
 }
 
+/* Fundo escuro */
+.overlayBackdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.8);
+  z-index: 9998;
+}
 
 /* ==========================================================================
-   MOBILE / TABLET (Ecrãs menores que 768px)
-   Mantendo a estrutura EXATA que forneceste
+   MOBILE / TABLET 
    ========================================================================== */
 @media (max-width: 768px) {
   
@@ -178,7 +193,7 @@ html, body {
   .content {
     width: 100%;      
     padding: 1rem;    
-    padding-top: 4rem; /* Mantido conforme teu código original */
+    padding-top: 4rem; 
     overflow-x: hidden; 
   }
 
@@ -191,12 +206,43 @@ html, body {
     width: 100%;
   }
 
+  /* Mostra o botão no mobile */
+  .expandBtn {
+    display: inline-block; 
+  }
+
+  /* --- MODO EXPANDIDO --- */
+  .expandedChart {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 9999;
+    border-radius: 0;
+    padding: 10px !important;
+    justify-content: flex-start; /* Conteúdo no topo */
+    overflow: hidden;
+  }
+
+  /* Quando expandido, o wrapper ocupa tudo */
+  .expandedChart .chartScrollWrapper {
+    width: 100%;
+    height: 90vh; /* Altura quase total */
+    overflow-y: auto; /* Permite scroll se houver muitos utilizadores */
+  }
+
+  /* Quando expandido, o gráfico cresce */
+  .expandedChart .barChart {
+    height: 100% !important; 
+    min-height: 500px; /* Garante altura mínima para ver as barras */
+  }
+
   .content h1 {
     font-size: 1.5rem;
     margin-top: 0.5rem;
   }
   
-  /* Ajuste no Título para Mobile */
   .chartTitleWrapper h2 {
     font-size: 1.2rem;
   }
@@ -209,12 +255,10 @@ html, body {
     height: 300px;
   }
 
-  /* --- Ajuste Especial para o Tooltip no Mobile --- 
-     Isto garante que o balão não sai do ecrã à direita/esquerda */
   .infoIcon::after {
     width: 160px;
-    left: -70px; /* Puxa o balão para a esquerda */
-    transform: none; /* Remove a centralização absoluta */
+    left: -70px;
+    transform: none;
     bottom: 150%; 
   }
   

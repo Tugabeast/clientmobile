@@ -2,7 +2,7 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  /*overflow-y: hidden; /* evita scroll vertical */
+  overflow-y: hidden; /* evita scroll vertical */
 }
 
 .app-container {
@@ -161,6 +161,16 @@ h1 {
 
 /* MOBILE */
 @media (max-width: 768px) {
+  html, body {
+    overflow-y: auto !important; /* Força o scroll a aparecer */
+    height: auto !important;     /* Permite que o corpo da página cresça */
+    min-height: 100vh;
+  }
+
+  .custom-sidebar{
+    height: 130vh !important;
+  }
+  
   .main-content { margin-top: 100px; margin-left: -240px; padding: 16px 12px; }
   h1 { font-size: 26px; font-weight: bold; margin-bottom: 15px; }
   .post-card { padding: 12px; margin-bottom: 20px; }
