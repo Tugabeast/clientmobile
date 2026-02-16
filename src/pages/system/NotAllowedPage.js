@@ -36,7 +36,7 @@ const NotAllowedPage = () => {
 
         <div style={{ marginTop: 20 }}>
           <a
-            href="/"
+            href="/mobile"
             style={{
               display: 'inline-block',
               padding: '10px 16px',

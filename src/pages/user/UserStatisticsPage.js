@@ -39,7 +39,6 @@ const UserStatisticsPage = () => {
     api.get('/stats/general')
       .then(res => {
         let data = res.data;
-        // Tenta buscar o username do localStorage
         const storedUser = localStorage.getItem('user');
         
         if (storedUser) {
@@ -69,6 +68,7 @@ const UserStatisticsPage = () => {
       .catch(err => console.error('Erro stats timeline:', err));
   }, []);
 
+
   useEffect(() => {
     const timeout = setTimeout(() => {
       const sidebar = document.querySelector('.css-1wvake5');
@@ -80,6 +80,7 @@ const UserStatisticsPage = () => {
       if (sidebar) sidebar.style.position = '';
     };
   }, []);
+
 
   // --- DADOS DOS GRÁFICOS ---
   const pieData = {
@@ -99,7 +100,7 @@ const UserStatisticsPage = () => {
     ],
   };
 
-  // --- MANTIDO IGUAL AO TEU CÓDIGO (LINHA) ---
+ 
   const lineData = {
     labels: timelineStats.map(item => item.date), 
     datasets: [
@@ -143,9 +144,8 @@ const UserStatisticsPage = () => {
       }
     };
 
-    // --- OPÇÕES DO GRÁFICO DE BARRAS (DINÂMICAS) ---
+    // --- OPÇÕES DO GRÁFICO DE BARRAS (DINÂMICAS + STACKED) ---
     const barOptions = {
-        // AQUI ESTÁ O SEGREDO: Se estiver expandido, muda para 'y' (barras horizontais)
         indexAxis: isBarExpanded ? 'y' : 'x', 
         responsive: true,
         maintainAspectRatio: false,
@@ -155,13 +155,13 @@ const UserStatisticsPage = () => {
         scales: {
             // Eixo X
             x: { 
+                stacked: true, // <--- ADICIONADO: Empilha as barras
                 ticks: { 
                     autoSkip: false, 
-                    // Se expandido (horizontal), não precisamos de rodar o texto
                     maxRotation: isBarExpanded ? 0 : 45, 
                     minRotation: isBarExpanded ? 0 : 45 
                 },
-                // Se expandido, o X passa a ser os números, então aplicamos stepSize aqui
+                
                 ...(isBarExpanded && {
                     title: { display: true, text: 'Nº de Classificações' },
                     ticks: { stepSize: 1, precision: 0 }
@@ -169,8 +169,9 @@ const UserStatisticsPage = () => {
             },
             // Eixo Y
             y: {
+                stacked: true, // <--- ADICIONADO: Empilha as barras
                 beginAtZero: true,
-                // Se NÃO expandido (vertical), o Y são os números
+                
                 ...(!isBarExpanded && {
                     title: { display: true, text: 'Nº de Classificações' },
                     ticks: { stepSize: 1, precision: 0 }
@@ -210,13 +211,13 @@ const UserStatisticsPage = () => {
             </div>
           </div>
 
-          {/* GRÁFICO 3: GRÁFICO DE BARRAS (MODIFICADO PARA EXPANSÃO) */}
+          {/* GRÁFICO 3: GRÁFICO DE BARRAS (STACKED) */}
           <div className={`${styles.chartSection} ${isBarExpanded ? styles.expandedChart : ''}`}>
             <div className={styles.chartTitleWrapper}>
               <h2>Classificações Gerais</h2>
               <span className={styles.infoIcon} data-tooltip={tooltipText}>?</span>
               
-              {/* BOTÃO PARA EXPANDIR (Visível só em mobile via CSS) */}
+              {/* BOTÃO PARA EXPANDIR */}
               <button 
                 className={styles.expandBtn}
                 onClick={() => setIsBarExpanded(!isBarExpanded)}
@@ -228,13 +229,13 @@ const UserStatisticsPage = () => {
             <div className={styles.chartScrollWrapper} ref={scrollRef}>
               <div
                 className={styles.barChart}
-                // Se expandido, ocupa o tamanho total do ecrã. Se não, usa a largura calculada.
+                
                 style={isBarExpanded ? { width: '100%', height: '100%' } : { minWidth: `${Math.max(generalStats.length, 7) * 100}px` }}
               >
                 <Bar
                   data={barData}
                   options={barOptions} 
-                  // height={300} -> Removemos a altura fixa no JSX para o CSS controlar quando expandido
+                  
                 />
               </div>
             </div>
